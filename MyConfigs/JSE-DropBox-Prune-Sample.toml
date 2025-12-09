@@ -1,0 +1,88 @@
+[settings]
+
+    # (Default) true  = no files will be deleted when running the script. Useful for testing what will happen.
+    #           false = they WILL be deleted according to your settings below. BE SURE YOU WANT THIS!
+    dry_run = true
+    #dry_run = false
+
+    # Choose whether to prune local path(s) or your remote DropBox path(s)
+    # NOTE:
+    # When you have the DropBox (Dbox) app installed on your computer and you prune the local files linked to your Dbox
+    # account it's essentially the same thing as pruning the files remotely on your Dbox itself since the app syncs changes
+    # for you. So, you may find it simply more convenient to do that instead of directly pruning on Dbox itself with this
+    # script since Dbox is notorious for breaking the apps/scripts us devs create all the time.
+    #
+    # (Default) true  = local
+    #           false = DropBox
+    local = false
+    #local = true
+
+    # Your DropBox Tokens
+    # These are the tokens provided when you create an App for the Dbox account you are wanting to use this script on.
+    # https://www.dropbox.com/developers/apps
+    app_key = "YOUR APP KEY"
+    app_secret = "YOUR APP SECRET"
+    refresh_token = "YOUR REFRESH TOKEN"
+
+    # The file pattern to use. Be sure to double-escape any chars needing to be escaped.
+    # Following pattern matches for example, a file named: mia-2024-02-10-1412.sql.bz2.enc
+    # Files matching this pattern are the ones that will be considered "matches";
+    # aka the files we're looking for that will either be kept or deleted based on your
+    # other settings below.
+    # Example: you have a script doing db backups nightly and sending them over to your
+    # Dbox account, so they'll all have a similar filename where the date/timestamp may be
+    # the only difference.
+    # Use a regex tester first to confirm your regex will match your specific file name pattern.
+    regex_pattern = "^[A-Za-z0-9_-]+-\\d{4}-\\d{2}-\\d{2}-\\d{4}\\.sql\\.bz2\\.enc$"
+
+    # Default number of files to keep (defaults to the 2 most recent)
+    # This number can be overridden on a per-folder basis below
+    default_keep = 2
+
+    # Logging
+    log_file = "./Logs/JSE-DropBox-Prune-cleanup.log"
+    enable_logging = true
+
+[paths]
+
+    # + ----------------------------------------------------------------------------------------------------------------- +
+    # | PATH OBJECTS                                                                                                      |
+    # | ----------------------------------------------------------------------------------------------------------------- +
+    # | name:         the human-readable name. Can be whatever.                                                           |
+    # | path_local:   the full local path to your DropBox folder containing the files you want to prune                   |
+    # |               ex. "C:/Users/scott/Dropbox/Backups/Databases/a1/GeekDrop"                                          |
+    # | path_dropbox: the full remote DropBox folder path containing the files you want to prune                          |
+    # |               ex. "/Backups/Databases/a1/GeekDrop"                                                                |
+    # | ignore:       an array of files you DON'T want to be deleted within the above folder(s)                           |
+    # | keep:         the number of files to keep. Overrides the default above.                                           |
+    # + ----------------------------------------------------------------------------------------------------------------- +
+
+    [paths.a1]
+        [paths.a1.blog]
+        name = "Dogg Blogg"
+        path_local = "C:/Users/scott/Dropbox/Backups/Databases/a1/Blog"
+        path_dropbox = "/Backups/Databases/a1/Blog"
+        ignore = []
+        keep = 1
+
+        [paths.a1.geekdrop]
+        name = "GeekDrop"
+        path_local = "C:/Users/scott/Dropbox/Backups/Databases/a1/GeekDrop"
+        path_dropbox = "/Backups/Databases/a1/GeekDrop"
+        ignore = ["geekdrop-2024-01-14-0257.sql.bz2.enc"]
+        keep = 2
+
+    [paths.b2]
+        [paths.b2.authelia]
+        name = "Authelia"
+        path_local = "C:/Users/scott/Dropbox/Backups/Databases/b2/Authelia"
+        path_dropbox = "/Backups/Databases/b2/Authelia"
+        ignore = []
+        keep = 1
+
+        [paths.b2.bitwarden]
+        name = "Bitwarden"
+        path_local = "C:/Users/scott/Dropbox/Backups/Databases/b2/Bitwarden"
+        path_dropbox = "/Backups/Databases/b2/Bitwarden"
+        ignore = []
+        keep = 2
